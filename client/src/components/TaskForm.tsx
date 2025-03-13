@@ -15,12 +15,13 @@ const TaskForm: React.FC = () => {
   });
   const dispatch = useAppDispatch();
 
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://craftboard-dep.onrender.com";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/tasks', task);
-
+      const response = await axios.post(`${API_BASE_URL}/tasks`, task);
       if (response.data && response.data.id) {
         dispatch(addTask(response.data));
       } else {
