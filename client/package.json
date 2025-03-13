@@ -17,6 +17,7 @@
     "@types/redux": "^3.6.0",
     "axios": "^1.8.3",
     "core-js-pure": "^3.41.0",
+    "netlify-cli": "^19.0.2",
     "path": "^0.12.7",
     "prop-types": "^15.8.1",
     "react": "^19.0.0",
@@ -25,7 +26,8 @@
     "react-dom": "^19.0.0",
     "react-icons": "^5.5.0",
     "react-redux": "^9.2.0",
-    "redux": "^5.0.1"
+    "redux": "^5.0.1",
+    "update": "^0.7.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
