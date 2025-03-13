@@ -10,12 +10,11 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        fromService:
+        fromDatabase:
           name: craftboard_db  
-          type: dpg
+          property: DATABASE_URL
       - key: JWT_SECRET
-        value: "e4c2a6b8d0f34860b2e2a5c7f9a3b2d6f8c4e1a2b3c5d7e6f9a1b2c3d4e5f6g7"
-        sync: false  # Set manually in Render UI
+        value: "e4c2a6b8d0f34860b2e2a5c7f9a3b2d6f8c4e1a2b3c5d7e6f9a1b2c3d4e5f6g7" 
 
 databases:
   - name: craftboard_db  
