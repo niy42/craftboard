@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const InviteForm: React.FC = () => {
   const [email, setEmail] = useState('');
-  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://craftboard-dep.onrender.com";
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "https://craftboard-dep.onrender.com";
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();

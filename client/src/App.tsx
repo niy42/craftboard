@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAppDispatch } from './store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store';
 import { setTasks } from './features/tasks/taskSlice';
 import { BiColumns, BiHistory, BiListUl } from 'react-icons/bi';
@@ -11,11 +10,12 @@ import TaskList from './components/TaskList';
 import { Task } from './types/types';
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const [filter, setFilter] = useState({ type: '', priority: '', people: '' });
   const [isLoading, setIsLoading] = useState(true);
-  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://craftboard-dep.onrender.com";
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // For mobile filter toggle
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://craftboard-dep.onrender.com';
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -33,54 +33,65 @@ const App: React.FC = () => {
     fetchTasks();
   }, [dispatch]);
 
-  console.log('Redux tasks:', tasks);
-  const filteredTasks = tasks.filter((task: Task) => {
-    return (
-      (filter.type === '' || task.type === filter.type) &&
-      (filter.priority === '' || task.priority === filter.priority) &&
-      (filter.people === '' || task.people.includes(filter.people))
-    );
-  });
+  const filteredTasks = tasks.filter((task: Task) =>
+    (filter.type === '' || task.type === filter.type) &&
+    (filter.priority === '' || task.priority === filter.priority) &&
+    (filter.people === '' || task.people.includes(filter.people))
+  );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="text-lg font-medium text-gray-600 animate-pulse">Loading...</div>
+      </div>
+    );
   }
 
   return (
-    <div className="font-sans w-full">
-      <header className="flex justify-between items-center p-4 bg-gray-50 shadow-sm">
-        <div>
-          <span className="text-2xl font-bold text-green-700">Craftboard Project</span>
-          <div className="flex gap-3 mt-2">
-            <button className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-md text-sm flex items-center">
-              <BiColumns className="mr-1 h-4 w-4 text-gray-600" />
-              Kanban
-            </button>
-            <button className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-md text-sm flex items-center">
-              <BiHistory className="mr-1 h-4 w-4 text-gray-600" />
-              Timeline
-            </button>
-            <button className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-md text-sm flex items-center">
-              <BiListUl className="mr-1 h-4 w-4 text-gray-600" />
-              List
-            </button>
+    <div className="font-sans min-h-screen bg-gray-100 text-gray-800">
+      <header className="sticky top-0 z-10 flex flex-col sm:flex-row items-center justify-between px-4 py-4 bg-white shadow-md">
+        <div className="flex flex-col items-center sm:items-start mb-4 sm:mb-0 w-full sm:w-auto">
+          <h1 className="text-xl sm:text-2xl font-bold text-teal-600 tracking-tight">Craftboard</h1>
+          <div className="flex flex-wrap justify-center gap-2 mt-3">
+            {[
+              { icon: BiColumns, label: 'Kanban' },
+              { icon: BiHistory, label: 'Timeline' },
+              { icon: BiListUl, label: 'List' },
+            ].map(({ icon: Icon, label }) => (
+              <button
+                key={label}
+                className="flex items-center px-2 py-1 text-xs sm:text-sm text-gray-600 bg-white rounded-lg hover:bg-teal-50 hover:text-teal-700 transition-colors duration-200 shadow-sm"
+              >
+                <Icon className="w-4 h-4 mr-1" />
+                {label}
+              </button>
+            ))}
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
           <input
             type="text"
-            placeholder="Search..."
-            className="p-2 border rounded-md border-gray-300 text-sm w-48"
+            placeholder="Search tasks..."
+            className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white shadow-sm w-full sm:w-56 transition-all duration-200"
           />
-          <div className="relative group">
-            <button className="px-4 py-2 text-gray-600 hover:bg-gray-200 rounded-md text-sm">
+          <div className="relative w-full sm:w-auto">
+            <button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="flex items-center justify-center w-full sm:w-auto px-3 py-2 text-sm text-gray-600 bg-white rounded-lg hover:bg-teal-50 hover:text-teal-700 transition-colors duration-200 shadow-sm"
+            >
               Filter
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
             </button>
-            <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg hidden group-hover:block">
+            <div
+              className={`${isFilterOpen ? 'block' : 'hidden'
+                } sm:absolute sm:right-0 mt-2 w-full sm:w-64 p-4 bg-white border border-gray-200 rounded-xl shadow-lg sm:transition-all sm:duration-200 z-10`}
+            >
               <select
                 value={filter.type}
                 onChange={(e) => setFilter({ ...filter, type: e.target.value })}
-                className="p-2 w-full border-b"
+                className="w-full p-2 mb-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50"
               >
                 <option value="">All Types</option>
                 <option value="Dashboard">Dashboard</option>
@@ -89,7 +100,7 @@ const App: React.FC = () => {
               <select
                 value={filter.priority}
                 onChange={(e) => setFilter({ ...filter, priority: e.target.value })}
-                className="p-2 w-full border-b"
+                className="w-full p-2 mb-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50"
               >
                 <option value="">All Priorities</option>
                 <option value="Low">Low</option>
@@ -100,20 +111,25 @@ const App: React.FC = () => {
                 type="text"
                 value={filter.people}
                 onChange={(e) => setFilter({ ...filter, people: e.target.value })}
-                placeholder="Filter by Person"
-                className="p-2 w-full"
+                placeholder="Filter by person"
+                className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 bg-gray-50"
               />
             </div>
           </div>
           <InviteForm />
-          <button className="px-4 py-2 bg-green-700 text-white rounded-md text-sm">New Task</button>
+          <button className="w-full sm:w-auto px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors duration-200 shadow-md">
+            + New Task
+          </button>
         </div>
       </header>
-      <div className="p-4">
+
+      <main className="max-w-7xl space-y-4 mx-auto p-4 sm:p-6">
         <TaskForm />
-        <TaskList tasks={filteredTasks.filter((t: Task) => !t.isChecked)} category="To-do" />
-        <TaskList tasks={filteredTasks.filter((t: Task) => t.isChecked)} category="Completed" />
-      </div>
+        <div className="space-y-6 sm:space-y-8">
+          <TaskList tasks={filteredTasks.filter((t: Task) => !t.isChecked)} category="To-do" />
+          <TaskList tasks={filteredTasks.filter((t: Task) => t.isChecked)} category="Completed" />
+        </div>
+      </main>
     </div>
   );
 };
