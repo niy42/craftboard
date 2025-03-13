@@ -64,12 +64,6 @@ npm run start:dev
 - **Frontend:** Deployed on [Netlify/Vercel](https://your-live-site-link.com)  
 - **Backend:** Hosted on [Render](https://dashboard.render.com/)  
 
----
-
-## **📸 Screenshots**  
-📷 Add some images of your dashboard here!  
-
----
 
 ## **🤝 Contributing**  
 Want to improve Craftboard? Feel free to **fork, submit issues, or contribute!**  
