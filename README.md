@@ -6,7 +6,7 @@
 ![Craftboard Preview](https://github.com/niy42/craftboard/blob/main/client/imgs/craftb.png)  
 
 ### **🔹 Live Demo**  
-👉 [Craftboard on Netlify/Vercel](https://your-live-site-link.com)  
+👉 [Craftboard on Netlify/Vercel](https://craftboard.netlify.app/)  
 
 ---
 
