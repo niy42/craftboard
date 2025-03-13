@@ -61,15 +61,9 @@ npm run start:dev
 ---
 
 ## **🌎 Deployment**  
-- **Frontend:** Deployed on [Netlify/Vercel](https://your-live-site-link.com)  
+- **Frontend:** Deployed on [Netlify/Vercel](https://craftboard.netlify.app/)  
 - **Backend:** Hosted on [Render](https://dashboard.render.com/)  
 
----
-
-## **📸 Screenshots**  
-📷 Add some images of your dashboard here!  
-
----
 
 ## **🤝 Contributing**  
 Want to improve Craftboard? Feel free to **fork, submit issues, or contribute!**  
