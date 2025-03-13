@@ -15,12 +15,13 @@ const App: React.FC = () => {
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const [filter, setFilter] = useState({ type: '', priority: '', people: '' });
   const [isLoading, setIsLoading] = useState(true);
+  const API_BASE_URL = process.env.REACT_APP_API_URL || "https://craftboard-dep.onrender.com";
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/tasks');
-        console.log('Fetched tasks:', response.data); // ✅ Log fetched data
+        const response = await axios.get(`${API_BASE_URL}/tasks`);
+        console.log('Fetched tasks:', response.data);
         if (!response.data) throw new Error('No tasks found');
         dispatch(setTasks(response.data));
       } catch (error) {
@@ -32,8 +33,7 @@ const App: React.FC = () => {
     fetchTasks();
   }, [dispatch]);
 
-  console.log('Redux tasks:', tasks); // ✅ Check if Redux has tasks
-
+  console.log('Redux tasks:', tasks);
   const filteredTasks = tasks.filter((task: Task) => {
     return (
       (filter.type === '' || task.type === filter.type) &&
