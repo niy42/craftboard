@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAppDispatch } from './store'; // Use typed dispatch
+import { useAppDispatch } from './store';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
-import { setTasks } from './features/tasks/taskSlice'; // Import from your slice
+import { setTasks } from './features/tasks/taskSlice';
 import { BiColumns, BiHistory, BiListUl } from 'react-icons/bi';
 import InviteForm from './components/InviteForm';
 import TaskForm from './components/TaskForm';
@@ -11,7 +11,7 @@ import TaskList from './components/TaskList';
 import { Task } from './types/types';
 
 const App: React.FC = () => {
-  const dispatch = useAppDispatch(); // Use typed dispatch
+  const dispatch = useAppDispatch();
   const tasks = useSelector((state: RootState) => state.tasks.tasks);
   const [filter, setFilter] = useState({ type: '', priority: '', people: '' });
   const [isLoading, setIsLoading] = useState(true);
